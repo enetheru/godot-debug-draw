@@ -57,18 +57,18 @@ test-headless *test_file='':
 check-fmt *files='':
   @if [ "{{files}}" = "" ]; then \
     _gd=$(find . -name "*.gd" -not -path "./.godot/*" -not -path "./addons/gdUnit4/*"); \
-    if [ -z "$_gd" ]; then echo "! No GDScript files found, skipping format check"; else echo "$_gd" | xargs gdscript-formatter --use-spaces --indent-size 2 --reorder-code --check; fi; \
+    if [ -z "$_gd" ]; then echo "! No GDScript files found, skipping format check"; else echo "$_gd" | xargs gdscript-formatter --reorder-code --check; fi; \
   else \
-    gdscript-formatter --use-spaces --indent-size 2 --reorder-code --check {{files}}; \
+    gdscript-formatter --reorder-code --check {{files}}; \
   fi
 
 # Format code (no args = whole project, with args = selected files)
 fmt *files='':
   @if [ "{{files}}" = "" ]; then \
     _gd=$(find . -name "*.gd" -not -path "./.godot/*" -not -path "./addons/gdUnit4/*"); \
-    if [ -z "$_gd" ]; then echo "! No GDScript files found, skipping formatting"; else echo "$_gd" | xargs gdscript-formatter --use-spaces --indent-size 2 --reorder-code; fi; \
+    if [ -z "$_gd" ]; then echo "! No GDScript files found, skipping formatting"; else echo "$_gd" | xargs gdscript-formatter --reorder-code; fi; \
   else \
-    gdscript-formatter --use-spaces --indent-size 2 --reorder-code {{files}}; \
+    gdscript-formatter --reorder-code {{files}}; \
   fi
 
 # Lint code (no args = whole project, with args = selected files)
@@ -88,11 +88,11 @@ check *files='':
     if [ -z "$_gd" ]; then \
       echo "! No GDScript files found, skipping checks"; \
     else \
-      echo "$_gd" | xargs gdscript-formatter --use-spaces --indent-size 2 --reorder-code --check; \
+      echo "$_gd" | xargs gdscript-formatter --reorder-code --check; \
       echo "$_gd" | xargs gdscript-formatter lint --disable max-line-length; \
     fi; \
   else \
-    gdscript-formatter --use-spaces --indent-size 2 --reorder-code --check {{files}}; \
+    gdscript-formatter --reorder-code --check {{files}}; \
     gdscript-formatter lint --disable max-line-length {{files}}; \
   fi
 
