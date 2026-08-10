@@ -20,7 +20,7 @@ Most line APIs accept a `width` or `line_width` parameter.
 
 - `-1.0` uses the node's `line_width` property.
 - A positive value overrides the default for that call.
-- Line width is rendered in screen space by the line shaders.
+- `line_width_mode` selects how width is interpreted. `SCREEN_SPACE` renders width in pixels; `WORLD_SPACE` renders width in world units.
 
 ## API Suffixes
 

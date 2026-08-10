@@ -11,12 +11,13 @@ Related: [Concepts](concepts.md), [Getting Started](getting-started.md), [Render
 | `flush()` | Commit current buffers immediately and reset submissions. Usually automatic. |
 | `set_layer_enabled(layer, enabled)` | Toggle a positive layer bit in `visible_layers`. |
 
-Useful exported properties: `debug_visible`, `line_width`, `back_fade_start`, `back_fade_transition`, `round_joint_resolution`, `miter_limit`, `depth_bias`, `visible_layers`.
+Useful exported properties: `debug_visible`, `line_width`, `line_width_mode`, `back_fade_start`, `back_fade_transition`, `round_joint_resolution`, `miter_limit`, `depth_bias`, `visible_layers`.
 
 ## Enums
 
 | Enum | Values |
 | --- | --- |
+| `LineWidthMode` | `SCREEN_SPACE`, `WORLD_SPACE` |
 | `LineJoint` | `NONE`, `ROUND`, `BEVEL`, `MITER` |
 | `GridOuterEdges` | `NONE`, `X`, `Y`, `Z`, `XZ`, `ALL` |
 

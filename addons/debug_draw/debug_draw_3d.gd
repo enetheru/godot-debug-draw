@@ -3,8 +3,9 @@ extends Node3D
 ## In-scene 3D debug draw node.
 ##
 ## Lines are submitted for the current frame, converted to MultiMesh instances,
-## and expanded to screen-space quads in the vertex shader.
+## and expanded to screen- or world-space quads in the vertex shader.
 
+enum LineWidthMode { SCREEN_SPACE, WORLD_SPACE }
 enum LineJoint { NONE = 0, ROUND = -1, BEVEL = -2, MITER = -3 }
 enum GridOuterEdges { NONE = 0, X = 1, Y = 2, Z = 4, XZ = 5, ALL = 7 }
 
@@ -49,7 +50,11 @@ const RECT_RENDERER_SCRIPT := preload("res://addons/debug_draw/renderers/debug_r
 const MESH_RENDERER_SCRIPT := preload("res://addons/debug_draw/renderers/debug_mesh_renderer_3d.gd")
 
 @export var debug_visible := true
-@export_range(0.1, 64.0, 0.1) var line_width := 1.0
+@export_range(0.001, 64.0, 0.001) var line_width := 1.0
+@export var line_width_mode: LineWidthMode = LineWidthMode.SCREEN_SPACE:
+	set(value):
+		line_width_mode = clampi(value, LineWidthMode.SCREEN_SPACE, LineWidthMode.WORLD_SPACE)
+		_update_line_width_mode()
 @export_range(0.0, 179.9, 0.1, "radians_as_degrees") var back_fade_start := BACK_FADE_START_DEFAULT:
 	set(value):
 		back_fade_start = clampf(value, BACK_FADE_START_MIN, BACK_FADE_START_MAX)
@@ -1499,6 +1504,7 @@ func _setup_renderers() -> void:
 	_cone_renderer.setup(_cone_mesh_instance, _cone_mesh, MESH_SHADER, depth_bias)
 	_setup_joint_renderers()
 	_update_back_fade_parameters()
+	_update_line_width_mode()
 
 
 func _create_line_quad_mesh() -> ArrayMesh:
@@ -1702,6 +1708,17 @@ func _get_normal_joint_shader(joint: int) -> Shader:
 	return NORMAL_JOINT_ROUND_SHADER
 
 
+func _update_line_width_mode() -> void:
+	if _line_renderer == null:
+		return
+
+	_line_renderer.set_line_width_mode(line_width_mode)
+	_normal_line_renderer.set_line_width_mode(line_width_mode)
+	for joint in _get_rendered_line_joints():
+		_joint_renderers[joint].set_line_width_mode(line_width_mode)
+		_normal_joint_renderers[joint].set_line_width_mode(line_width_mode)
+
+
 func _update_line_material_depth_bias() -> void:
 	if not is_node_ready() or _line_renderer == null:
 		return
@@ -1744,6 +1761,8 @@ func _update_joint_material_parameters() -> void:
 			back_fade_start,
 			back_fade_transition,
 		)
+		_joint_renderers[joint].set_line_width_mode(line_width_mode)
+		_normal_joint_renderers[joint].set_line_width_mode(line_width_mode)
 
 
 func _update_back_fade_parameters() -> void:
@@ -3498,7 +3517,7 @@ func _emit_rect_s_transform(
 func _resolve_line_width(width: float) -> float:
 	if width > 0.0:
 		return width
-	return maxf(line_width, 0.1)
+	return maxf(line_width, 0.001)
 
 
 func _is_rendered_line_joint(joint: int) -> bool:

@@ -67,6 +67,15 @@ func set_depth_bias(depth_bias: float) -> void:
 		material.set_shader_parameter(&"depth_bias", depth_bias)
 
 
+func set_line_width_mode(mode: int) -> void:
+	if _mesh_instance == null:
+		return
+
+	var material := _mesh_instance.material_override as ShaderMaterial
+	if material != null:
+		material.set_shader_parameter(&"line_width_mode", mode)
+
+
 func emit_joint(
 		previous: Vector3,
 		center: Vector3,

@@ -10,6 +10,7 @@ Related: [Getting Started](getting-started.md), [API Reference](api-reference.md
 | --- | --- |
 | `examples/index.tscn` | Overview scene covering every current `DebugDraw3D.draw_*` API. |
 | `examples/line.tscn` | Lines, rays, strips, loops, dashes, normal-aware paths, and joints. |
+| `examples/world_space_width.tscn` | World-space counterpart of the index layout for line-rendered APIs and wire shapes. |
 | `examples/arrow.tscn` | Arrow and arrow-line helpers. |
 | `examples/axes.tscn` | Local-axis helpers. |
 | `examples/grid.tscn` | Grid cells, spacing, edges, skew, and normal-aware grids. |

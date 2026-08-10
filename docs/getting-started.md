@@ -39,7 +39,8 @@ func _ready() -> void:
 Useful properties:
 
 - `debug_visible`: shows or hides all submitted debug geometry.
-- `line_width`: default width when a draw call passes `-1.0`.
+- `line_width`: default width when a draw call passes `-1.0`; its unit is selected by `line_width_mode`.
+- `line_width_mode`: `SCREEN_SPACE` uses pixels; `WORLD_SPACE` uses world units.
 - `depth_bias`: small clip-space offset that reduces z-fighting.
 - `visible_layers`: bitmask that filters submitted debug layers.
 - `round_joint_resolution`: triangle-fan resolution for round line joints.
