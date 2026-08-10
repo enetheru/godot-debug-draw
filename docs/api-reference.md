@@ -80,6 +80,7 @@ Useful exported properties: `debug_visible`, `line_width`, `back_fade_start`, `b
 | API | Notes |
 | --- | --- |
 | `draw_circle(center, rotation, radius, color, line_width, segment_count, joint, layer)` | Closed circular loop. |
+| `draw_circle_s(center, rotation, radius, color, segment_count, layer)` | Filled circular disk. |
 | `draw_circle_n(...)`, `draw_circle_d(...)`, `draw_circle_n_d(...)` | Normal-aware and dashed circle variants. |
 | `draw_arc(center, rotation, radius, angle, color, line_width, segment_count, joint, layer)` | Open arc strip. |
 | `draw_arc_n(...)`, `draw_arc_d(...)`, `draw_arc_n_d(...)` | Normal-aware and dashed arc variants. |

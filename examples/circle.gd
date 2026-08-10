@@ -97,6 +97,7 @@ func _draw_samples() -> void:
 	_draw_normal_samples(7)
 	_draw_normal_dash_samples(8)
 	_draw_normal_joint_samples(9)
+	_draw_solid_samples(10)
 
 
 func _draw_width_samples(column: int) -> void:
@@ -193,6 +194,17 @@ func _draw_dash_joint_samples(column: int) -> void:
 		)
 
 
+func _draw_solid_samples(column: int) -> void:
+	for row in SEGMENT_VALUES.size():
+		_debug_draw.draw_circle_s(
+			_get_circle_center(column, row),
+			_get_flat_rotation(0.0),
+			CIRCLE_RADIUS,
+			Color(0.25, 0.65, 1.0, 0.45),
+			SEGMENT_VALUES[row],
+		)
+
+
 func _draw_normal_samples(column: int) -> void:
 	for row in NORMAL_SAMPLE_COUNT:
 		_debug_draw.draw_circle_n(
@@ -280,7 +292,7 @@ func _create_label(
 
 
 func _get_column_count() -> int:
-	return 10
+	return 11
 
 
 func _get_column_sample_count(column: int) -> int:
@@ -305,6 +317,8 @@ func _get_column_sample_count(column: int) -> int:
 			return DASH_VALUES.size()
 		9:
 			return JOINT_VALUES.size()
+		10:
+			return SEGMENT_VALUES.size()
 		_:
 			return 0
 
@@ -331,6 +345,8 @@ func _get_column_label(column: int) -> String:
 			return "circle_n_d(dash)"
 		9:
 			return "circle_n(joint)"
+		10:
+			return "circle_s(segments)"
 		_:
 			return "circle"
 
@@ -359,6 +375,8 @@ func _get_sample_label(column: int, row: int) -> String:
 			return "%.2f / %.2f" % [normal_dash.x, normal_dash.y]
 		9:
 			return _get_joint_label(JOINT_VALUES[row])
+		10:
+			return "%d seg" % SEGMENT_VALUES[row]
 		_:
 			return ""
 

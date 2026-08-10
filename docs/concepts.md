@@ -76,6 +76,7 @@ Layer values must be positive bit flags. `DEFAULT_LAYER` is `1`.
 Solid helpers use the `_s` suffix:
 
 - `draw_rect_s`
+- `draw_circle_s`
 - `draw_box_s`
 - `draw_sphere_s`
 - `draw_cone_s`

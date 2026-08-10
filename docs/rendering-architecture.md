@@ -18,7 +18,7 @@ Related: [Concepts](concepts.md), [API Reference](api-reference.md), [Getting St
 - `JointMesh`
 - `NormalJointMesh`
 
-Additional mesh instances for bevel and miter joints are created on demand at runtime.
+Additional mesh instances for bevel and miter joints, plus one filled-circle mesh for each requested segment count, are created on demand at runtime.
 
 ## Frame Pipeline
 
@@ -39,7 +39,7 @@ When `debug_visible` is false, renderers clear their MultiMesh visible counts an
 | `debug_joint_renderer_3d.gd` | Round, bevel, and miter joint fans. |
 | `debug_normal_joint_renderer_3d.gd` | Normal-aware joint fans. |
 | `debug_rect_renderer_3d.gd` | Filled rect instances. |
-| `debug_mesh_renderer_3d.gd` | Solid box, sphere, cylinder, and cone instances. |
+| `debug_mesh_renderer_3d.gd` | Solid box, sphere, cylinder, cone, and filled-circle instances. |
 
 Each renderer owns a MultiMesh, grows its capacity in powers of two, updates `visible_instance_count`, and writes a custom AABB for culling.
 
@@ -53,7 +53,7 @@ Shader groups live in `addons/debug_draw/shaders/`:
 - `debug_normal_line_3d*`: normal-aware strokes.
 - `debug_line_joint_*`: regular joints.
 - `debug_normal_line_joint_*`: normal-aware joints.
-- `debug_rect_3d.gdshader`: filled rects.
+- `debug_rect_3d.gdshader`: filled rects and circles.
 - `debug_mesh_3d.gdshader`: solid shape helpers.
 
 ## Layers and Visibility

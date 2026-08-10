@@ -48,7 +48,7 @@ const ROW_LABELS := [
 	["draw_grid", "draw_grid_n"],
 	["draw_rect", "draw_rect_s", "draw_rect_n", "draw_rect_d", "draw_rect_n_d"],
 	["draw_box", "draw_box_s", "draw_box_n", "draw_box_d", "draw_box_n_d"],
-	["draw_circle", "draw_circle_n", "draw_circle_d", "draw_circle_n_d"],
+	["draw_circle", "draw_circle_s", "draw_circle_n", "draw_circle_d", "draw_circle_n_d"],
 	["draw_arc", "draw_arc_n", "draw_arc_d", "draw_arc_n_d"],
 	["draw_sphere", "draw_sphere_s", "draw_sphere_n", "draw_sphere_d", "draw_sphere_n_d"],
 	["draw_cone", "draw_cone_s", "draw_cone_n"],
@@ -136,9 +136,10 @@ func _process(_delta: float) -> void:
 	_debug_draw.draw_box_n_d(_p(10, 4, 0.5), Quaternion.IDENTITY, Vector3(0.7, 0.7, 0.7), Color(0.5, 1.0, 0.65), 2.0, DASH_WIDTH, DASH_SPACE, DASH_OFFSET)
 
 	_debug_draw.draw_circle(_p(11, 0, 0.5), Quaternion.IDENTITY, 0.4, Color.WHITE, 2.0, 32, DebugDraw3D.LineJoint.ROUND)
-	_debug_draw.draw_circle_n(_p(11, 1, 0.5), Quaternion.IDENTITY, 0.4, Color(0.35, 1.0, 1.0), 2.0, 32, DebugDraw3D.LineJoint.BEVEL)
-	_debug_draw.draw_circle_d(_p(11, 2, 0.5), Quaternion.IDENTITY, 0.4, Color(1.0, 0.75, 0.25), 2.0, DASH_WIDTH, DASH_SPACE, DASH_OFFSET, 32, DebugDraw3D.LineJoint.MITER)
-	_debug_draw.draw_circle_n_d(_p(11, 3, 0.5), Quaternion.IDENTITY, 0.4, Color(0.5, 1.0, 0.65), 2.0, DASH_WIDTH, DASH_SPACE, DASH_OFFSET, 32, DebugDraw3D.LineJoint.ROUND)
+	_debug_draw.draw_circle_s(_p(11, 1, 0.5), Quaternion.IDENTITY, 0.4, Color(0.25, 0.65, 1.0, 0.45), 32)
+	_debug_draw.draw_circle_n(_p(11, 2, 0.5), Quaternion.IDENTITY, 0.4, Color(0.35, 1.0, 1.0), 2.0, 32, DebugDraw3D.LineJoint.BEVEL)
+	_debug_draw.draw_circle_d(_p(11, 3, 0.5), Quaternion.IDENTITY, 0.4, Color(1.0, 0.75, 0.25), 2.0, DASH_WIDTH, DASH_SPACE, DASH_OFFSET, 32, DebugDraw3D.LineJoint.MITER)
+	_debug_draw.draw_circle_n_d(_p(11, 4, 0.5), Quaternion.IDENTITY, 0.4, Color(0.5, 1.0, 0.65), 2.0, DASH_WIDTH, DASH_SPACE, DASH_OFFSET, 32, DebugDraw3D.LineJoint.ROUND)
 
 	_debug_draw.draw_arc(_p(12, 0, 0.5), Quaternion.IDENTITY, 0.45, PI * 1.25, Color.WHITE, 2.0, 32, DebugDraw3D.LineJoint.ROUND)
 	_debug_draw.draw_arc_n(_p(12, 1, 0.5), Quaternion.IDENTITY, 0.45, PI * 1.25, Color(0.35, 1.0, 1.0), 2.0, 32, DebugDraw3D.LineJoint.BEVEL)

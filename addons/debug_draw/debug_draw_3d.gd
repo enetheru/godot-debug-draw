@@ -90,6 +90,7 @@ var _box_renderer: RefCounted
 var _sphere_renderer: RefCounted
 var _cylinder_renderer: RefCounted
 var _cone_renderer: RefCounted
+var _circle_renderers_by_segment_count := { }
 var _joint_renderers := { }
 var _normal_joint_renderers := { }
 var _joint_mesh_instances := { }
@@ -131,6 +132,8 @@ func flush() -> void:
 	if debug_visible:
 		var camera_transform := _get_camera_transform()
 		_rect_renderer.commit(visible_layers, camera_transform)
+		for segment_count in _circle_renderers_by_segment_count:
+			_circle_renderers_by_segment_count[segment_count].commit(visible_layers, camera_transform)
 		_box_renderer.commit(visible_layers, camera_transform)
 		_sphere_renderer.commit(visible_layers, camera_transform)
 		_cylinder_renderer.commit(visible_layers, camera_transform)
@@ -144,6 +147,8 @@ func flush() -> void:
 		_line_renderer.clear()
 		_normal_line_renderer.clear()
 		_rect_renderer.clear()
+		for segment_count in _circle_renderers_by_segment_count:
+			_circle_renderers_by_segment_count[segment_count].clear()
 		_box_renderer.clear()
 		_sphere_renderer.clear()
 		_cylinder_renderer.clear()
@@ -960,6 +965,20 @@ func draw_circle(
 	draw_line_loop(points, color, line_width, joint, layer)
 
 
+func draw_circle_s(
+		center: Vector3,
+		rotation: Quaternion,
+		radius: float,
+		color: Color = Color.WHITE,
+		segment_count: int = CIRCLE_SEGMENT_COUNT_DEFAULT,
+		layer: int = DEFAULT_LAYER,
+) -> void:
+	if radius <= 0.0 or segment_count < CIRCLE_SEGMENT_COUNT_MIN:
+		return
+
+	_emit_circle_s(center, rotation, radius, color, segment_count, layer)
+
+
 func draw_circle_n(
 		center: Vector3,
 		rotation: Quaternion,
@@ -1522,6 +1541,26 @@ func _create_rect_mesh() -> ArrayMesh:
 	return mesh
 
 
+func _create_circle_mesh(segment_count: int) -> ArrayMesh:
+	var vertices := PackedVector3Array()
+	var unit_points := _get_circle_unit_points(segment_count)
+	vertices.resize(segment_count * 3)
+	for i in segment_count:
+		var next_index := (i + 1) % segment_count
+		var offset := i * 3
+		vertices[offset] = Vector3.ZERO
+		vertices[offset + 1] = Vector3(unit_points[i].x, unit_points[i].y, 0.0) * 0.5
+		vertices[offset + 2] = Vector3(unit_points[next_index].x, unit_points[next_index].y, 0.0) * 0.5
+
+	var arrays := []
+	arrays.resize(Mesh.ARRAY_MAX)
+	arrays[Mesh.ARRAY_VERTEX] = vertices
+
+	var mesh := ArrayMesh.new()
+	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
+	return mesh
+
+
 func _create_box_mesh() -> BoxMesh:
 	var mesh := BoxMesh.new()
 	mesh.size = Vector3.ONE
@@ -1564,6 +1603,21 @@ func _create_joint_fan_mesh(vertex_count: int) -> ArrayMesh:
 	var mesh := ArrayMesh.new()
 	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
 	return mesh
+
+
+func _get_or_create_circle_renderer(segment_count: int) -> RefCounted:
+	var existing: RefCounted = _circle_renderers_by_segment_count.get(segment_count)
+	if existing != null:
+		return existing
+
+	var mesh_instance := MultiMeshInstance3D.new()
+	mesh_instance.name = "CircleMesh%d" % segment_count
+	add_child(mesh_instance)
+
+	var renderer: RefCounted = MESH_RENDERER_SCRIPT.new()
+	renderer.setup(mesh_instance, _create_circle_mesh(segment_count), RECT_SHADER, depth_bias)
+	_circle_renderers_by_segment_count[segment_count] = renderer
+	return renderer
 
 
 func _setup_joint_renderers() -> void:
@@ -1659,6 +1713,8 @@ func _update_line_material_depth_bias() -> void:
 	_sphere_renderer.set_depth_bias(depth_bias)
 	_cylinder_renderer.set_depth_bias(depth_bias)
 	_cone_renderer.set_depth_bias(depth_bias)
+	for segment_count in _circle_renderers_by_segment_count:
+		_circle_renderers_by_segment_count[segment_count].set_depth_bias(depth_bias)
 	for joint in _get_rendered_line_joints():
 		_joint_renderers[joint].set_depth_bias(depth_bias)
 		_normal_joint_renderers[joint].set_depth_bias(depth_bias)
@@ -1713,6 +1769,8 @@ func _reset_buffers() -> void:
 	_sphere_renderer.reset()
 	_cylinder_renderer.reset()
 	_cone_renderer.reset()
+	for segment_count in _circle_renderers_by_segment_count:
+		_circle_renderers_by_segment_count[segment_count].reset()
 	for joint in _get_rendered_line_joints():
 		_joint_renderers[joint].reset()
 		_normal_joint_renderers[joint].reset()
@@ -3392,6 +3450,23 @@ func _emit_cone_s(
 	var diameter := radius * 2.0
 	_cone_renderer.emit_mesh(
 		Transform3D(Basis(basis.x * diameter, basis.y * height, basis.z * diameter), pos),
+		color,
+		layer,
+	)
+
+
+func _emit_circle_s(
+		center: Vector3,
+		rotation: Quaternion,
+		radius: float,
+		color: Color,
+		segment_count: int,
+		layer: int,
+) -> void:
+	var basis := Basis(rotation.normalized())
+	var diameter := radius * 2.0
+	_get_or_create_circle_renderer(segment_count).emit_mesh(
+		Transform3D(Basis(basis.x * diameter, basis.y * diameter, basis.z * diameter), center),
 		color,
 		layer,
 	)

@@ -9,7 +9,7 @@ Reusable in-scene 3D debug drawing for Godot 4.x.
 ## Features
 
 - Lines, rays, arrows, axes, point collections, curves, and grids.
-- Wire and solid rects, boxes, spheres, cones, cylinders, and capsules.
+- Wire and solid rects, circles, boxes, spheres, cones, cylinders, and capsules.
 - Dashed lines, normal-aware fading, round/bevel/miter joints, and layer filtering.
 - Screen-space line widths and configurable depth bias.
 - Curated example scenes for every public shape family.

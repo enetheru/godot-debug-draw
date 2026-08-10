@@ -15,7 +15,7 @@ Related: [Getting Started](getting-started.md), [API Reference](api-reference.md
 | `examples/grid.tscn` | Grid cells, spacing, edges, skew, and normal-aware grids. |
 | `examples/rect.tscn` | Wire and filled rects, dashes, rotation, joints, and normal-aware variants. |
 | `examples/box.tscn` | Wire, solid, dashed, and normal-aware boxes. |
-| `examples/circle.tscn` | Circle segments, dashes, joints, and normal-aware variants. |
+| `examples/circle.tscn` | Filled circles, segments, dashes, joints, and normal-aware variants. |
 | `examples/arc.tscn` | Arc angles, segments, dashes, joints, and normal-aware variants. |
 | `examples/curve.tscn` | `Curve3D` tessellation and dashed curves. |
 | `examples/sphere.tscn` | Sphere rings, solid spheres, axis segment counts, dashes, and normals. |
