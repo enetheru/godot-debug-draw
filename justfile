@@ -128,13 +128,14 @@ changelog:
 # Release
 # --------------------------------------------------
 
-# Create and publish a GitHub release with an addon-only ZIP, e.g. `just release v1.0.0`
+# Generate and publish a GitHub release with an addon-only ZIP, e.g. `just release v1.0.0`
 release version:
   @set -e; \
   if [ -n "$(git status --porcelain)" ]; then \
     echo "! Working tree is not clean" >&2; \
     exit 1; \
   fi; \
+  command -v cog >/dev/null 2>&1 || { echo "! cog is required to generate the changelog" >&2; exit 1; }; \
   command -v gh >/dev/null 2>&1 || { echo "! gh is required to create a GitHub release" >&2; exit 1; }; \
   command -v unzip >/dev/null 2>&1 || { echo "! unzip is required to validate the release ZIP" >&2; exit 1; }; \
   case "{{version}}" in \
@@ -146,16 +147,21 @@ release version:
     exit 1; \
   fi; \
   just check; \
+  branch=$(git branch --show-current); \
+  [ -n "${branch}" ] || { echo "! Release must run from a branch" >&2; exit 1; }; \
+  version_number="{{version}}"; \
+  cog bump --version "${version_number#v}" --annotated "Release {{version}}"; \
   tmpdir=$(mktemp -d); \
   trap 'rm -rf "${tmpdir}"' EXIT; \
   asset="${tmpdir}/debug-draw-{{version}}.zip"; \
-  git archive --format=zip --prefix=addons/debug_draw/ --output "${asset}" HEAD:addons/debug_draw; \
+  notes="${tmpdir}/release-notes.md"; \
+  git archive --format=zip --prefix=addons/debug_draw/ --output "${asset}" "{{version}}:addons/debug_draw"; \
   invalid=$(unzip -Z1 "${asset}" | grep -v '^addons/debug_draw/' || true); \
   if [ -n "${invalid}" ]; then \
     echo "! Release ZIP contains paths outside addons/debug_draw/" >&2; \
     echo "${invalid}" >&2; \
     exit 1; \
   fi; \
-  git tag -a "{{version}}" -m "Release {{version}}"; \
-  git push origin "{{version}}"; \
-  gh release create "{{version}}" "${asset}" --title "{{version}}" --generate-notes
+  cog changelog --at "{{version}}" > "${notes}"; \
+  git push origin "${branch}" "{{version}}"; \
+  gh release create "{{version}}" "${asset}" --title "{{version}}" --notes-file "${notes}"

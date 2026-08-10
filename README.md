@@ -87,8 +87,12 @@ just fmt               # Format project GDScript
 just lint              # Lint project GDScript
 just check             # Run formatting and lint checks
 just changelog         # Generate CHANGELOG.md with cocogitto
-just release v1.0.0    # Create an annotated tag, addon ZIP, and GitHub Release
+just release v1.0.0    # Commit the changelog, tag, package, and publish a GitHub Release
 ```
+
+### Releases
+
+Run `just release vX.Y.Z` from a clean working tree. It checks the code, generates and commits `CHANGELOG.md`, creates an annotated tag, packages only `addons/debug_draw/`, and publishes the matching changelog section as the GitHub Release notes.
 
 ## Project Structure
 
