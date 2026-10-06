@@ -1,4 +1,5 @@
-extends "res://addons/debug_draw/renderers/debug_joint_renderer_3d.gd"
+@tool
+extends "debug_joint_renderer_3d.gd"
 
 var _back_fade_start := deg_to_rad(100.0)
 var _back_fade_transition := deg_to_rad(20.0)

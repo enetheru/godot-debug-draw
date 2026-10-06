@@ -1,3 +1,4 @@
+@tool
 extends RefCounted
 
 const BUFFER_STRIDE := 20

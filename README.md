@@ -99,10 +99,10 @@ Run `just release vX.Y.Z` from a clean working tree. It checks the code, generat
 ```text
 addons/
   debug_draw/
-    renderers/
-    shaders/
-    debug_draw_3d.tscn
-    debug_draw_3d.gd
+	renderers/
+	shaders/
+	debug_draw_3d.tscn
+	debug_draw_3d.gd
 docs/
 examples/
 entities/

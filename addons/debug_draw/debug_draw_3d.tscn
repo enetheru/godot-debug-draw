@@ -1,24 +1,24 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene format=3 uid="uid://bwevxfcprnyu1"]
 
-[ext_resource type="Script" path="res://addons/debug_draw/debug_draw_3d.gd" id="1"]
+[ext_resource type="Script" uid="uid://cg7vy80qm3vyh" path="res://addons/hardalex.debug-draw/debug_draw_3d.gd" id="1_t8gl6"]
 
-[node name="DebugDraw3D" type="Node3D"]
-script = ExtResource("1")
+[node name="DebugDraw3D" type="Node3D" unique_id=1113460200]
+script = ExtResource("1_t8gl6")
 
-[node name="RectMesh" type="MultiMeshInstance3D" parent="."]
+[node name="RectMesh" type="MultiMeshInstance3D" parent="." unique_id=411715036]
 
-[node name="BoxMesh" type="MultiMeshInstance3D" parent="."]
+[node name="BoxMesh" type="MultiMeshInstance3D" parent="." unique_id=1813584567]
 
-[node name="SphereMesh" type="MultiMeshInstance3D" parent="."]
+[node name="SphereMesh" type="MultiMeshInstance3D" parent="." unique_id=530088122]
 
-[node name="CylinderMesh" type="MultiMeshInstance3D" parent="."]
+[node name="CylinderMesh" type="MultiMeshInstance3D" parent="." unique_id=362531768]
 
-[node name="ConeMesh" type="MultiMeshInstance3D" parent="."]
+[node name="ConeMesh" type="MultiMeshInstance3D" parent="." unique_id=1219332261]
 
-[node name="LineMesh" type="MultiMeshInstance3D" parent="."]
+[node name="LineMesh" type="MultiMeshInstance3D" parent="." unique_id=1532397553]
 
-[node name="NormalLineMesh" type="MultiMeshInstance3D" parent="."]
+[node name="NormalLineMesh" type="MultiMeshInstance3D" parent="." unique_id=1794221606]
 
-[node name="JointMesh" type="MultiMeshInstance3D" parent="."]
+[node name="JointMesh" type="MultiMeshInstance3D" parent="." unique_id=92058538]
 
-[node name="NormalJointMesh" type="MultiMeshInstance3D" parent="."]
+[node name="NormalJointMesh" type="MultiMeshInstance3D" parent="." unique_id=48953481]

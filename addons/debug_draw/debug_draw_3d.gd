@@ -1,4 +1,5 @@
-class_name DebugDraw3D
+@tool
+class_name _DebugDraw3D
 extends Node3D
 ## In-scene 3D debug draw node.
 ##
@@ -32,22 +33,22 @@ const ARROW_HEAD_LENGTH_DEFAULT := 0.2
 const ARROW_HEAD_ANGLE_DEFAULT := PI / 6.0
 const ARROW_HEAD_ANGLE_MIN := 0.001
 const ARROW_HEAD_ANGLE_MAX := PI * 0.49
-const LINE_SHADER := preload("res://addons/debug_draw/shaders/debug_line_3d.gdshader")
-const NORMAL_LINE_SHADER := preload("res://addons/debug_draw/shaders/debug_normal_line_3d.gdshader")
-const JOINT_ROUND_SHADER := preload("res://addons/debug_draw/shaders/debug_line_joint_round_3d.gdshader")
-const JOINT_BEVEL_SHADER := preload("res://addons/debug_draw/shaders/debug_line_joint_bevel_3d.gdshader")
-const JOINT_MITER_SHADER := preload("res://addons/debug_draw/shaders/debug_line_joint_miter_3d.gdshader")
-const NORMAL_JOINT_ROUND_SHADER := preload("res://addons/debug_draw/shaders/debug_normal_line_joint_round_3d.gdshader")
-const NORMAL_JOINT_BEVEL_SHADER := preload("res://addons/debug_draw/shaders/debug_normal_line_joint_bevel_3d.gdshader")
-const NORMAL_JOINT_MITER_SHADER := preload("res://addons/debug_draw/shaders/debug_normal_line_joint_miter_3d.gdshader")
-const LINE_RENDERER_SCRIPT := preload("res://addons/debug_draw/renderers/debug_line_renderer_3d.gd")
-const NORMAL_LINE_RENDERER_SCRIPT := preload("res://addons/debug_draw/renderers/debug_normal_line_renderer_3d.gd")
-const JOINT_RENDERER_SCRIPT := preload("res://addons/debug_draw/renderers/debug_joint_renderer_3d.gd")
-const NORMAL_JOINT_RENDERER_SCRIPT := preload("res://addons/debug_draw/renderers/debug_normal_joint_renderer_3d.gd")
-const RECT_SHADER := preload("res://addons/debug_draw/shaders/debug_rect_3d.gdshader")
-const MESH_SHADER := preload("res://addons/debug_draw/shaders/debug_mesh_3d.gdshader")
-const RECT_RENDERER_SCRIPT := preload("res://addons/debug_draw/renderers/debug_rect_renderer_3d.gd")
-const MESH_RENDERER_SCRIPT := preload("res://addons/debug_draw/renderers/debug_mesh_renderer_3d.gd")
+const LINE_SHADER := preload("shaders/debug_line_3d.gdshader")
+const NORMAL_LINE_SHADER := preload("shaders/debug_normal_line_3d.gdshader")
+const JOINT_ROUND_SHADER := preload("shaders/debug_line_joint_round_3d.gdshader")
+const JOINT_BEVEL_SHADER := preload("shaders/debug_line_joint_bevel_3d.gdshader")
+const JOINT_MITER_SHADER := preload("shaders/debug_line_joint_miter_3d.gdshader")
+const NORMAL_JOINT_ROUND_SHADER := preload("shaders/debug_normal_line_joint_round_3d.gdshader")
+const NORMAL_JOINT_BEVEL_SHADER := preload("shaders/debug_normal_line_joint_bevel_3d.gdshader")
+const NORMAL_JOINT_MITER_SHADER := preload("shaders/debug_normal_line_joint_miter_3d.gdshader")
+const LINE_RENDERER_SCRIPT := preload("renderers/debug_line_renderer_3d.gd")
+const NORMAL_LINE_RENDERER_SCRIPT := preload("renderers/debug_normal_line_renderer_3d.gd")
+const JOINT_RENDERER_SCRIPT := preload("renderers/debug_joint_renderer_3d.gd")
+const NORMAL_JOINT_RENDERER_SCRIPT := preload("renderers/debug_normal_joint_renderer_3d.gd")
+const RECT_SHADER := preload("shaders/debug_rect_3d.gdshader")
+const MESH_SHADER := preload("shaders/debug_mesh_3d.gdshader")
+const RECT_RENDERER_SCRIPT := preload("renderers/debug_rect_renderer_3d.gd")
+const MESH_RENDERER_SCRIPT := preload("renderers/debug_mesh_renderer_3d.gd")
 
 @export var debug_visible := true
 @export_range(0.001, 64.0, 0.001) var line_width := 1.0
@@ -103,19 +104,40 @@ var _normal_joint_mesh_instances := { }
 var _circle_unit_points_by_segment_count := { }
 var _circle_unit_normal_points_by_segment_count := { }
 
-@onready var _mesh_instance: MultiMeshInstance3D = $LineMesh
-@onready var _normal_line_mesh_instance: MultiMeshInstance3D = $NormalLineMesh
-@onready var _joint_mesh_instance: MultiMeshInstance3D = $JointMesh
-@onready var _normal_joint_mesh_instance: MultiMeshInstance3D = $NormalJointMesh
-@onready var _rect_mesh_instance: MultiMeshInstance3D = $RectMesh
-@onready var _box_mesh_instance: MultiMeshInstance3D = $BoxMesh
-@onready var _sphere_mesh_instance: MultiMeshInstance3D = $SphereMesh
-@onready var _cylinder_mesh_instance: MultiMeshInstance3D = $CylinderMesh
-@onready var _cone_mesh_instance: MultiMeshInstance3D = $ConeMesh
+var _mesh_instance := MultiMeshInstance3D.new()
+var _normal_line_mesh_instance := MultiMeshInstance3D.new()
+var _joint_mesh_instance := MultiMeshInstance3D.new()
+var _normal_joint_mesh_instance := MultiMeshInstance3D.new()
+var _rect_mesh_instance := MultiMeshInstance3D.new()
+var _box_mesh_instance := MultiMeshInstance3D.new()
+var _sphere_mesh_instance := MultiMeshInstance3D.new()
+var _cylinder_mesh_instance := MultiMeshInstance3D.new()
+var _cone_mesh_instance := MultiMeshInstance3D.new()
+
+func _init() -> void:
+	_mesh_instance.name = "LineMesh"
+	_normal_line_mesh_instance.name = "NormalLineMesh"
+	_joint_mesh_instance.name = "JointMesh"
+	_normal_joint_mesh_instance.name = "NormalJointMesh"
+	_rect_mesh_instance.name = "RectMesh"
+	_box_mesh_instance.name = "BoxMesh"
+	_sphere_mesh_instance.name = "SphereMesh"
+	_cylinder_mesh_instance.name = "CylinderMesh"
+	_cone_mesh_instance.name = "ConeMesh"
+
+	for node:Node in [_mesh_instance,
+			_normal_line_mesh_instance,
+			_joint_mesh_instance,
+			_normal_joint_mesh_instance,
+			_rect_mesh_instance,
+			_box_mesh_instance,
+			_sphere_mesh_instance,
+			_cylinder_mesh_instance,
+			_cone_mesh_instance]:
+		add_child( node )
 
 
 func _ready() -> void:
-	_validate_global_basis()
 	process_priority = DEFAULT_PROCESS_PRIORITY
 	_line_mesh = _create_line_quad_mesh()
 	_round_joint_mesh = _create_joint_fan_mesh(round_joint_resolution * 3)
@@ -1801,13 +1823,6 @@ func _get_camera_transform() -> Transform3D:
 	if camera != null:
 		return camera.global_transform
 	return Transform3D.IDENTITY
-
-
-func _validate_global_basis() -> void:
-	if global_transform.basis.is_equal_approx(Basis.IDENTITY):
-		return
-
-	push_error("DebugDraw3D must not be rotated or scaled. Keep its global basis as identity.")
 
 
 func _emit_grid_lines(
